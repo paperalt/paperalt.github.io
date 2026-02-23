@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Live2D (Optional if not tracking heavy assets, but usually we do track them for GitHub Pages)
+# keeping them tracked for now.
+
+# Output (Optional: usually tracked for GitHub Pages, but if building via Actions, might ignore. User likely wants to push 'writeups' folder)
+# writeups/ 

@@ -1,0 +1,57 @@
+[
+  {
+    "title": "Tutorial: Advanced Python Scripting for Pentesters",
+    "date": "2026-02-15",
+    "category": "Tutorial",
+    "author": "Paperalt",
+    "description": "Lanjutan dari tutorial sebelumnya, kita akan membahas teknik threading dan async di Python untuk mempercepat scanning.",
+    "tags": "Python, Advanced, Pentesting",
+    "filename": "dummy_another_tutorial.html",
+    "url": "writeups/dummy_another_tutorial.html",
+    "id": "F534"
+  },
+  {
+    "title": "Test: Interlinking & Obsidian Support",
+    "date": "2026-02-14",
+    "category": "Meta",
+    "author": "Paperalt",
+    "description": "Testing cross-linking capabilities using Obsidian syntax.",
+    "tags": "Testing, Obsidian",
+    "filename": "dummy_links.html",
+    "url": "writeups/dummy_links.html",
+    "id": "B8DF"
+  },
+  {
+    "title": "Secret Operation Result",
+    "date": "2026-02-14",
+    "category": "General",
+    "author": "Paperalt",
+    "description": "A report containing sensitive redacted information.",
+    "tags": "secret, confidential, security",
+    "filename": "dummy_secret.html",
+    "url": "writeups/dummy_secret.html",
+    "id": "92F3"
+  },
+  {
+    "title": "Tutorial: Cara Setup Environment Python untuk Hacking",
+    "date": "2026-02-14",
+    "category": "Tutorial",
+    "author": "Paperalt",
+    "description": "Panduan lengkap langkah demi langkah untuk menyiapkan environment Python yang powerful untuk keperluan Penetration Testing dan Cyber Security.",
+    "tags": "Python, Setup, Hacking, Beginners",
+    "filename": "dummy_python_setup.html",
+    "url": "writeups/dummy_python_setup.html",
+    "id": "5379"
+  },
+  {
+    "title": "Writeup: Capture The Flag - HackTheBox 'Lame",
+    "date": "2026-02-13",
+    "category": "Writeup",
+    "author": "Paperalt",
+    "description": "Writeup singkat untuk mesin Lame di HackTheBox. Mesin legendaris yang mengajarkan kita tentang Samba Vulnerability (CVE-2007-2447).",
+    "tags": "HTB, CTF, Easy, Linux, Samba",
+    "filename": "dummy_htb_lame.html",
+    "url": "writeups/dummy_htb_lame.html",
+    "id": "CCBA"
+  }
+]

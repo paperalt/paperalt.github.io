@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[PAGE_TITLE]</title>
+    <!-- SEO_TAGS_PLACEHOLDER -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon/favicon-16x16.png">
+    <link rel="manifest" href="../favicon/site.webmanifest">
+    <!-- Stylesheet: Pointing to assets/css/style.css from templates/ directory -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <canvas id="matrix-bg"></canvas>
+    <div class="scanline"></div>
+
+    <nav class="navbar">
+        <div class="logo"><a href="../index.html">.. / BACK_TO_ROOT</a></div>
+    </nav>
+
+    <main class="container">
+        <article class="writeup-content">
+            <header>
+                <h1>[WRITEUP TITLE HERE]</h1>
+                <div class="writeup-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">DATE:</span>
+                        <span class="meta-value">[YYYY-MM-DD]</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">AUTHOR:</span>
+                        <span class="meta-value">[AUTHOR]</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">CATEGORY:</span>
+                        <span class="meta-value">[WEB/NETWORK/CTF]</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="writeup-body">
+                <!-- DISCLAIMER_PLACEHOLDER -->
+                {{ CONTENT }}
+            </div>
+
+            <br>
+            <a href="../index.html" class="cyber-btn">
+                <span class="cyber-btn-glitch">END_SESSION</span>
+                <span class="cyber-btn-tag">EXIT</span>
+            </a>
+        </article>
+    </main>
+
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/L2Dwidget.min.js"></script>
+
+    <!-- Live2D Debug Panel -->
+    <div id="l2d-debug-panel"
+        style="display: none; position: fixed; bottom: 20px; left: 20px; background: rgba(0,0,0,0.8); border: 1px solid #0f0; padding: 15px; border-radius: 5px; z-index: 9999; color: #0f0; font-family: 'Share Tech Mono', monospace; max-width: 300px;">
+        <h3 style="margin-top: 0; color: #fff; text-shadow: 0 0 5px #0f0;">L2D Debug</h3>
+        <label for="texture-select" style="display: block; margin-bottom: 5px;">Select Texture:</label>
+        <select id="texture-select"
+            style="width: 100%; background: #000; color: #0f0; border: 1px solid #0f0; padding: 5px; margin-bottom: 10px;">
+            <option value="">Loading...</option>
+        </select>
+        <button id="apply-texture"
+            style="width: 100%; background: #0f0; color: #000; border: none; padding: 8px; font-weight: bold; cursor: pointer;">APPLY
+            TEXTURE</button>
+        <button id="close-debug"
+            style="margin-top: 10px; width: 100%; background: transparent; color: #ff0000; border: 1px solid #ff0000; padding: 5px; cursor: pointer;">CLOSE</button>
+    </div>
+
+    <!-- Toggle Button -->
+    <button id="toggle-debug"
+        style="position: fixed; bottom: 20px; left: 20px; background: rgba(0,0,0,0.5); color: #0f0; border: 1px solid #0f0; padding: 5px 10px; cursor: pointer; z-index: 9998; font-family: 'Share Tech Mono', monospace;">
+        DEBUG
+    </button>
+
+
+    <script>
+        // Live2D Configuration
+        const baseModelConfig = {
+            "model": {
+                "jsonPath": "../assets/live2d/pio/model.json",
+                "scale": 1
+            },
+            "display": {
+                "position": "right",
+                "width": 300,
+                "height": 600,
+                "hOffset": 0,
+                "vOffset": -180
+            },
+            "mobile": {
+                "show": true,
+                "scale": 0.5
+            },
+            "react": {
+                "opacityDefault": 0.7,
+                "opacityOnHover": 0.2
+            }
+        };
+
+        // Adjust for mobile to prevent floating
+        if (window.innerWidth < 768) {
+            baseModelConfig.display.vOffset = -250; // Balanced for mobile (not too high, not too low)
+            baseModelConfig.display.hOffset = -80; // Slight left adjustment
+        }
+
+        // Initialize default widget
+        // L2Dwidget.init(baseModelConfig); // Commented out to prevent double-loading. initLive2D handles this.
+
+        // Debug Panel Logic
+        const debugPanel = document.getElementById('l2d-debug-panel');
+        const toggleBtn = document.getElementById('toggle-debug');
+        const closeBtn = document.getElementById('close-debug');
+        const textureSelect = document.getElementById('texture-select');
+        const applyBtn = document.getElementById('apply-texture');
+        let modelData = null;
+
+        // Toggle Visibility
+        toggleBtn.addEventListener('click', () => {
+            debugPanel.style.display = 'block';
+            toggleBtn.style.display = 'none';
+            if (!modelData) loadTextureList();
+        });
+
+        closeBtn.addEventListener('click', () => {
+            debugPanel.style.display = 'none';
+            toggleBtn.style.display = 'block';
+        });
+
+        // Load Textures from model.json
+        async function loadTextureList() {
+            try {
+                const response = await fetch('../assets/live2d/pio/model.json');
+                modelData = await response.json(); // Keep modelData for other uses if any
+
+                // Fetch available textures from external JSON
+                await fetch('../assets/live2d/pio/textures.json')
+                    .then(response => response.json())
+                    .then(textures => {
+                        textureSelect.innerHTML = ''; // Clear existing options
+                        textures.forEach((tex, index) => {
+                            const opt = document.createElement('option');
+                            opt.value = tex;
+                            // Extract readable name
+                            // e.g., "textures/Cake Costume Cream.png" -> "Cake Costume Cream"
+                            const name = tex.split('/').pop().replace('.png', '');
+                            opt.textContent = `${index}: ${name}`;
+                            textureSelect.appendChild(opt);
+                        });
+                    })
+                    .catch(err => {
+                        console.error('Failed to load texture list:', err);
+                        textureSelect.innerHTML = '<option>Error loading textures</option>';
+                    });
+
+            } catch (error) {
+                console.error('Failed to load model.json:', error);
+                // If model.json fails, modelData will be null, but texture list loading is separate now.
+            }
+        }
+
+        // Network Interceptor for Dynamic Loading
+        (function () {
+            const originalOpen = XMLHttpRequest.prototype.open;
+            const originalSend = XMLHttpRequest.prototype.send;
+
+            XMLHttpRequest.prototype.open = function (method, url) {
+                this._url = url;
+                return originalOpen.apply(this, arguments);
+            };
+
+            XMLHttpRequest.prototype.send = function (body) {
+                if (this._url && typeof this._url === 'string' && this._url.includes('model_dynamic.json')) {
+                    console.log('Intercepted XHR for dynamic model:', this._url);
+
+                    // Delay execution to simulate network processing and ensure responseType is set
+                    setTimeout(() => {
+                        const data = window.currentModelData;
+                        if (!data) {
+                            console.error('Interceptor Error: window.currentModelData is missing!');
+                            // Simulate error
+                            Object.defineProperty(this, 'status', { writable: true, value: 404 });
+                            Object.defineProperty(this, 'statusText', { writable: true, value: 'Not Found' });
+                            Object.defineProperty(this, 'readyState', { writable: true, value: 4 });
+                            this.dispatchEvent(new Event('error'));
+                            return;
+                        }
+
+                        const jsonString = JSON.stringify(data);
+                        console.log('Interceptor: serving data for', this._url, 'responseType:', this.responseType);
+
+                        Object.defineProperty(this, 'readyState', { writable: true, value: 4 });
+                        Object.defineProperty(this, 'status', { writable: true, value: 200 });
+                        Object.defineProperty(this, 'statusText', { writable: true, value: 'OK' });
+
+                        // Handle responseType
+                        if (this.responseType === 'json') {
+                            Object.defineProperty(this, 'response', { writable: true, value: data });
+                            // responseText is not accessible when responseType is json
+                        } else if (this.responseType === 'arraybuffer') {
+                            const encoder = new TextEncoder();
+                            const buffer = encoder.encode(jsonString).buffer;
+                            Object.defineProperty(this, 'response', { writable: true, value: buffer });
+                        } else {
+                            Object.defineProperty(this, 'response', { writable: true, value: jsonString });
+                            Object.defineProperty(this, 'responseText', { writable: true, value: jsonString });
+                        }
+
+                        this.dispatchEvent(new Event('load'));
+                        if (this.onreadystatechange) this.onreadystatechange();
+                        if (this.onload) this.onload();
+                    }, 10);
+                    return;
+                }
+                return originalSend.apply(this, arguments);
+            };
+
+            const originalFetch = window.fetch;
+            window.fetch = async (url, options) => {
+                if (url && typeof url === 'string' && url.includes('model_dynamic.json')) {
+                    console.log('Intercepted Fetch for dynamic model');
+                    if (!window.currentModelData) {
+                        return new Response("Not Found", { status: 404 });
+                    }
+                    return new Response(JSON.stringify(window.currentModelData), {
+                        status: 200,
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                }
+                return originalFetch(url, options);
+            };
+        })();
+
+        // Preference Persistence
+        function savePreference(key, value) {
+            localStorage.setItem(key, value);
+        }
+
+        function loadPreference(key) {
+            return localStorage.getItem(key);
+        }
+
+        async function initLive2D() {
+            // Load texture list first
+            await loadTextureList();
+
+            // Check for saved preference
+            const savedTexture = loadPreference('live2d-texture');
+
+            if (savedTexture && modelData) {
+                console.log("Found saved texture preference:", savedTexture);
+                // We need to fetch the base model config to create the dynamic one
+                try {
+                    // Reuse loaded modelData instead of fetching again
+                    const baseConfig = modelData;
+
+                    // Create dynamic config
+                    const newModelData = JSON.parse(JSON.stringify(baseConfig));
+                    newModelData.textures = [savedTexture];
+                    window.currentModelData = newModelData;
+
+                    const timestamp = Date.now();
+                    const virtualPath = `../assets/live2d/pio/model_dynamic.json?t=${timestamp}`;
+
+                    const config = { ...baseModelConfig };
+                    config.model.jsonPath = virtualPath;
+
+                    L2Dwidget.init(config);
+
+                    // Set dropdown value if it exists
+                    // We need to wait for dropdown to populate, but loadTextureList is awaited above
+                    // However, we need to match the value exactly
+                    if (textureSelect) {
+                        textureSelect.value = savedTexture;
+                    }
+
+                } catch (e) {
+                    console.error("Failed to load saved preference, falling back to default.", e);
+                    L2Dwidget.init(baseModelConfig);
+                }
+            } else {
+                // Default initialization
+                L2Dwidget.init(baseModelConfig);
+            }
+        }
+
+        // Apply Selected Texture
+        applyBtn.addEventListener('click', () => {
+            const selectedTexture = textureSelect.value;
+            if (!selectedTexture || !modelData) return;
+
+            // Create a modified model config
+            // Use deep clone
+            const newModelData = JSON.parse(JSON.stringify(modelData));
+
+            // Set the selected texture
+            newModelData.textures = [selectedTexture];
+
+            // Store globally for interceptor
+            window.currentModelData = newModelData;
+
+            // Destroy existing widget
+            const existingWidget = document.getElementById('live2d-widget');
+            if (existingWidget) existingWidget.remove();
+
+            // Re-initialize with virtual path
+            // The path must allow relative resolution to ../assets/live2d/pio/
+            const timestamp = Date.now();
+            const virtualPath = `../assets/live2d/pio/model_dynamic.json?t=${timestamp}`;
+
+            const newConfig = { ...baseModelConfig };
+            newConfig.model.jsonPath = virtualPath;
+
+            console.log("Loading texture:", selectedTexture);
+            console.log("Loading virtual config:", virtualPath);
+
+            // Save preference
+            savePreference('live2d-texture', selectedTexture);
+
+            L2Dwidget.init(newConfig);
+        });
+
+        // Robust initialization with retry logic for mobile browsers
+        let initAttempts = 0;
+        const maxAttempts = 10;
+        const retryDelay = 300; // milliseconds
+        let isInitializing = false; // Flag to prevent multiple concurrent initializations
+
+        function tryInitializeLive2D() {
+            if (isInitializing) return; // Prevent concurrent calls
+            initAttempts++;
+
+            // Check if library is fully loaded and ready
+            if (typeof L2Dwidget !== 'undefined' && typeof L2Dwidget.init === 'function') {
+                console.log(`Live2D initialized successfully on attempt ${initAttempts}`);
+                isInitializing = true;
+                initLive2D();
+            } else if (initAttempts < maxAttempts) {
+                console.log(`Live2D not ready, retrying... (attempt ${initAttempts}/${maxAttempts})`);
+                setTimeout(tryInitializeLive2D, retryDelay * initAttempts); // Exponential backoff
+            } else {
+                console.error("Failed to initialize Live2D after multiple attempts. Library may not be loaded.");
+            }
+        }
+
+        // Try initialization when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', tryInitializeLive2D);
+        } else {
+            // DOM already loaded
+            tryInitializeLive2D();
+        }
+
+        // Fallback: ensure initialization on window load
+        window.addEventListener('load', () => {
+            // Check if already initialized (using isInitializing flag) OR check DOM presence
+            if (!isInitializing && (initAttempts === 0 || (typeof L2Dwidget !== 'undefined' && !document.getElementById('live2d-widget')))) {
+                console.log("Triggering Live2D init from window.onload");
+                tryInitializeLive2D();
+            }
+        });
+    </script>
+
+</body>
+
+</html>
