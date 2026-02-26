@@ -5,34 +5,10 @@
   <link>https://paperalt.github.io</link>
   <description>Cyber Security Writeups & Tutorials</description>
   <item>
-    <title>Test: Interlinking &amp; Obsidian Support</title>
-    <link>https://paperalt.github.io/writeups/dummy_links.html</link>
-    <description>Testing cross-linking capabilities using Obsidian syntax.</description>
-    <pubDate>2026-02-14</pubDate>
-  </item>
-  <item>
-    <title>Tutorial: Advanced Python Scripting for Pentesters</title>
-    <link>https://paperalt.github.io/writeups/dummy_another_tutorial.html</link>
-    <description>Lanjutan dari tutorial sebelumnya, kita akan membahas teknik threading dan async di Python untuk mempercepat scanning.</description>
-    <pubDate>2026-02-15</pubDate>
-  </item>
-  <item>
-    <title>Writeup: Capture The Flag - HackTheBox 'Lame</title>
-    <link>https://paperalt.github.io/writeups/dummy_htb_lame.html</link>
-    <description>Writeup singkat untuk mesin Lame di HackTheBox. Mesin legendaris yang mengajarkan kita tentang Samba Vulnerability (CVE-2007-2447).</description>
-    <pubDate>2026-02-13</pubDate>
-  </item>
-  <item>
-    <title>Secret Operation Result</title>
-    <link>https://paperalt.github.io/writeups/dummy_secret.html</link>
-    <description>A report containing sensitive redacted information.</description>
-    <pubDate>2026-02-14</pubDate>
-  </item>
-  <item>
-    <title>Tutorial: Cara Setup Environment Python untuk Hacking</title>
-    <link>https://paperalt.github.io/writeups/dummy_python_setup.html</link>
-    <description>Panduan lengkap langkah demi langkah untuk menyiapkan environment Python yang powerful untuk keperluan Penetration Testing dan Cyber Security.</description>
-    <pubDate>2026-02-14</pubDate>
+    <title>Writeup: Capture The Flag - TryHackMe 'Mother's Secret</title>
+    <link>https://paperalt.github.io/writeups/thm_mothers_secret_writeup.html</link>
+    <description>Writeup komprehensif untuk room Mother's Secret di TryHackMe. Room yang berfokus pada Code Analysis dan eksploitasi Local File Inclusion (LFI) pada endpoint API NodeJS.</description>
+    <pubDate>2026-02-26</pubDate>
   </item>
 </channel>
 </rss>

@@ -322,6 +322,42 @@ h3 {
     border-bottom-color: #ff00ff;
 }
 
+/* Writeup Text Spacing */
+.writeup-body p {
+    margin-bottom: 20px;
+}
+
+.writeup-body ul,
+.writeup-body ol {
+    margin-bottom: 20px;
+    margin-left: 25px;
+}
+
+.writeup-body li {
+    margin-bottom: 8px;
+}
+
+.writeup-body h2 {
+    margin-top: 45px;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    border-bottom: 1px solid #333;
+    padding-bottom: 5px;
+}
+
+.writeup-body h3 {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    color: #e0e0e0;
+}
+
+.writeup-body h4,
+.writeup-body h5,
+.writeup-body h6 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
 /* Redacted Data */
 .redacted {
     background: #000;
