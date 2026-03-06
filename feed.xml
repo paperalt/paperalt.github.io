@@ -5,6 +5,12 @@
   <link>https://paperalt.github.io</link>
   <description>Cyber Security Writeups & Tutorials</description>
   <item>
+    <title>CTF Yadika</title>
+    <link>https://paperalt.github.io/writeups/CTF_Yadika.html</link>
+    <description>Writeup CTF Yadika</description>
+    <pubDate>2026-03-06</pubDate>
+  </item>
+  <item>
     <title>Writeup: Capture The Flag - TryHackMe 'Mother's Secret</title>
     <link>https://paperalt.github.io/writeups/thm_mothers_secret_writeup.html</link>
     <description>Writeup komprehensif untuk room Mother's Secret di TryHackMe. Room yang berfokus pada Code Analysis dan eksploitasi Local File Inclusion (LFI) pada endpoint API NodeJS.</description>

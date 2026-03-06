@@ -1,5 +1,16 @@
 [
   {
+    "title": "CTF Yadika",
+    "date": "2026-03-06",
+    "category": "Writeup",
+    "author": "Alterpix",
+    "description": "Writeup CTF Yadika",
+    "tags": "CTF, Easy, Linux",
+    "filename": "CTF_Yadika.html",
+    "url": "writeups/CTF_Yadika.html",
+    "id": "0F3A"
+  },
+  {
     "title": "Writeup: Capture The Flag - TryHackMe 'Mother's Secret",
     "date": "2026-02-26",
     "category": "Writeup",
