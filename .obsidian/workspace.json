@@ -11,14 +11,12 @@
             "id": "3067944814c9bd34",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "image",
               "state": {
-                "file": "content/CTF_Yadika.md",
-                "mode": "source",
-                "source": false
+                "file": "assets/img/screenshot/Pasted image 20260310212705.png"
               },
-              "icon": "lucide-file",
-              "title": "CTF_Yadika"
+              "icon": "lucide-image",
+              "title": "Pasted image 20260310212705"
             }
           }
         ]
@@ -183,28 +181,30 @@
       "bases:Create new base": false
     }
   },
-  "active": "3067944814c9bd34",
+  "active": "7403880ea0b25e12",
   "lastOpenFiles": [
-    "assets/img/screenshot/Pasted_image_20260306175117.png",
-    "assets/img/screenshot/Pasted_image_20260306174835.png",
-    "assets/img/screenshot/Pasted_image_20260306174611.png",
-    "assets/img/screenshot/Pasted_image_20260306174441.png",
-    "assets/img/screenshot/Pasted_image_20260306174111.png",
-    "assets/img/screenshot/Pasted_image_20260306172844.png",
-    "assets/img/screenshot/Pasted_image_20260306172616.png",
-    "assets/img/screenshot/Pasted_image_20260306172321.png",
-    "assets/img/screenshot/Pasted_image_20260306170953.png",
-    "assets/img/screenshot/Pasted_image_20260306170310.png",
-    "assets/img/screenshot/Pasted_image_20260306165147.png",
-    "writeups/CTF_Yadika.html",
-    "content/CTF_Yadika.md",
-    "assets/img/screenshot/Unconfirmed 138099.crdownload",
-    "assets/img/screenshot",
+    "writeups/thm_Include.html",
     "Untitled.base",
     "roadmap.md",
+    "2026-03-06.md",
+    "assets/img/screenshot/Pasted image 20260310212705.png",
+    "content/thm_Include.md",
+    "assets/img/screenshot/Pasted image 20260310223807.png",
+    "assets/img/screenshot/Pasted image 20260310224345.png",
+    "assets/img/screenshot/Pasted image 20260310224459.png",
+    "assets/img/screenshot/Pasted image 20260310223601.png",
+    "Pasted image 20260310224003.png",
+    "Pasted image 20260310224200.png",
+    "assets/img/screenshot/Pasted image 20260310222034.png",
+    "assets/img/screenshot/Pasted image 20260310220356.png",
+    "assets/img/screenshot/Pasted image 20260310220032.png",
+    "content/CTF_Yadika.md",
+    "content/thm_mothers_secret_writeup.md",
     "templates/markdown/ctf-writeup.md",
+    "writeups/CTF_Yadika.html",
+    "assets/img/screenshot/Unconfirmed 138099.crdownload",
+    "assets/img/screenshot",
     "templates/markdown/tutorial.md",
-    "templates/markdown/opinion.md",
-    "2026-03-06.md"
+    "templates/markdown/opinion.md"
   ]
 }

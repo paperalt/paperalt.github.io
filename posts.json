@@ -1,6 +1,17 @@
 [
   {
-    "title": "CTF Yadika",
+    "title": "Writeup: Capture The Flag - TryHackMe 'Include",
+    "date": "2026-03-10",
+    "category": "Writeup",
+    "author": "Alterpix",
+    "description": "Singkat description about the machine.",
+    "tags": "CTF, HTB/THM, Easy, Linux",
+    "filename": "thm_Include.html",
+    "url": "writeups/thm_Include.html",
+    "id": "CEB5"
+  },
+  {
+    "title": "Writeup: Capture The Flag Yadika",
     "date": "2026-03-06",
     "category": "Writeup",
     "author": "Alterpix",
@@ -8,7 +19,7 @@
     "tags": "CTF, Easy, Linux",
     "filename": "CTF_Yadika.html",
     "url": "writeups/CTF_Yadika.html",
-    "id": "0F3A"
+    "id": "8B36"
   },
   {
     "title": "Writeup: Capture The Flag - TryHackMe 'Mother's Secret",

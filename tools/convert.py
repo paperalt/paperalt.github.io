@@ -17,53 +17,136 @@ except ImportError:
 TEMPLATE_PATH = "templates/writeup-template.html"
 OUTPUT_DIR = "writeups"
 ASSETS_IMG_DIR = "assets/img"
+SCREENSHOT_DIR = "assets/img/screenshot"
 BASE_URL = "https://paperalt.github.io"
+
+def convert_obsidian_images(md_content):
+    """
+    Converts Obsidian-style image embeds ![[filename.png]] to standard markdown
+    ![filename](../assets/img/screenshot/filename.png), pointing directly to
+    the screenshot directory where Obsidian-pasted images already live.
+    Also handles filenames with spaces (Obsidian default) by searching the
+    screenshot dir for a match (with or without underscores).
+    """
+    obsidian_img_pattern = r'!\[\[([^\]]+\.(?:png|jpg|jpeg|gif|webp|svg))\]\]'
+
+    def replace_obsidian_image(match):
+        filename = match.group(1).strip()
+        # Normalize: try as-is first, then underscore variant
+        candidates = [filename, filename.replace(' ', '_'), filename.replace('_', ' ')]
+
+        found_path = None
+        for candidate in candidates:
+            candidate_path = os.path.join(SCREENSHOT_DIR, candidate)
+            if os.path.exists(candidate_path):
+                found_path = candidate_path
+                break
+
+        if not found_path:
+            # Also check ASSETS_IMG_DIR root
+            for candidate in candidates:
+                candidate_path = os.path.join(ASSETS_IMG_DIR, candidate)
+                if os.path.exists(candidate_path):
+                    found_path = candidate_path
+                    break
+
+        if not found_path:
+            print(f"[!] Warning: Obsidian image not found: {filename}")
+            return match.group(0)  # Leave as-is if not found
+
+        # Use the actual filename from disk (preserves spaces/underscores)
+        actual_filename = os.path.basename(found_path)
+        rel_dir = os.path.relpath(os.path.dirname(found_path))
+        # Produce a path relative to the writeups/ output dir
+        web_path = f"../{rel_dir}/{actual_filename}"
+        return f"![{actual_filename}]({web_path})"
+
+    return re.sub(obsidian_img_pattern, replace_obsidian_image, md_content)
+
 
 def process_images(md_content, source_file_path):
     """
-    Finds image references in markdown, copies images to assets/img,
-    and updates the markdown to use correct relative paths.
+    Finds standard markdown image references, copies local images to assets/img,
+    and updates paths. Also resolves /assets/img/screenshot/ absolute references
+    by making them relative to the writeups/ output directory.
     """
     source_dir = os.path.dirname(os.path.abspath(source_file_path))
-    
+
     if not os.path.exists(ASSETS_IMG_DIR):
         os.makedirs(ASSETS_IMG_DIR)
-    
+
     image_pattern = r'!\[([^\]]*)\]\(([^)]+)\)'
-    
+
     def replace_image_path(match):
         alt_text = match.group(1)
         original_path = match.group(2)
-        
+
+        # External URLs: leave unchanged
         if original_path.startswith('http://') or original_path.startswith('https://'):
             return match.group(0)
+
+        # Already relative to writeups/ output dir
         if original_path.startswith('../assets/img/'):
             return match.group(0)
-        
+
+        # Absolute path like /assets/img/screenshot/Filename.png (from CTF_Yadika style)
+        if original_path.startswith('/assets/'):
+            # Convert to relative path usable from writeups/
+            # File should already exist on disk; just fix the path prefix.
+            disk_path = original_path.lstrip('/')  # strip leading slash -> assets/img/..
+            # Try exact match first, then with space<->underscore swap
+            basename = os.path.basename(disk_path)
+            dirpart  = os.path.dirname(disk_path)
+            candidates = [basename, basename.replace('_', ' '), basename.replace(' ', '_')]
+            found = None
+            for c in candidates:
+                p = os.path.join(dirpart, c)
+                if os.path.exists(p):
+                    found = p
+                    break
+            if found:
+                return f"![{alt_text}](../{found})"
+            else:
+                print(f"[!] Warning: Image not found: {disk_path}")
+                return match.group(0)
+
+        # Relative path: resolve from source file directory
         if os.path.isabs(original_path):
             source_image_path = original_path
         else:
             source_image_path = os.path.join(source_dir, original_path)
-        
+
         if not os.path.exists(source_image_path):
+            # Fallback: search screenshot dir with space<->underscore variants
+            basename = os.path.basename(original_path)
+            candidates = [basename, basename.replace('_', ' '), basename.replace(' ', '_')]
+            found = None
+            for c in candidates:
+                p = os.path.join(SCREENSHOT_DIR, c)
+                if os.path.exists(p):
+                    found = p
+                    break
+            if found:
+                actual = os.path.basename(found)
+                rel_dir = os.path.relpath(os.path.dirname(found))
+                return f"![{alt_text}](../{rel_dir}/{actual})"
             print(f"[!] Warning: Image not found: {source_image_path}")
             return match.group(0)
-        
+
         image_filename = os.path.basename(source_image_path)
         dest_image_path = os.path.join(ASSETS_IMG_DIR, image_filename)
-        
+
         try:
             shutil.copy2(source_image_path, dest_image_path)
             print(f"[+] Copied image: {image_filename} -> {ASSETS_IMG_DIR}/")
         except Exception as e:
             print(f"[!] Error copying image {image_filename}: {e}")
             return match.group(0)
-        
+
         new_path = f"../assets/img/{image_filename}"
         return f"![{alt_text}]({new_path})"
-    
-    updated_content = re.sub(image_pattern, replace_image_path, md_content)
-    return updated_content
+
+    return re.sub(image_pattern, replace_image_path, md_content)
 
 def parse_frontmatter(content):
     """
@@ -291,6 +374,8 @@ def process_file(input_file):
         full_content = f.read()
     
     meta, md_content = parse_frontmatter(full_content)
+    # Step 0: Convert Obsidian ![[img]] embeds to standard markdown before processing
+    md_content = convert_obsidian_images(md_content)
     md_content = process_images(md_content, input_file)
     
     # 1. Sanitize Secrets (Permanent File Update)

@@ -5,7 +5,13 @@
   <link>https://paperalt.github.io</link>
   <description>Cyber Security Writeups & Tutorials</description>
   <item>
-    <title>CTF Yadika</title>
+    <title>Writeup: Capture The Flag - TryHackMe 'Include</title>
+    <link>https://paperalt.github.io/writeups/thm_Include.html</link>
+    <description>Singkat description about the machine.</description>
+    <pubDate>2026-03-10</pubDate>
+  </item>
+  <item>
+    <title>Writeup: Capture The Flag Yadika</title>
     <link>https://paperalt.github.io/writeups/CTF_Yadika.html</link>
     <description>Writeup CTF Yadika</description>
     <pubDate>2026-03-06</pubDate>

@@ -1,5 +1,5 @@
 ---
-title: "CTF Yadika"
+title: "Writeup: Capture The Flag Yadika"
 date: "2026-03-06"
 category: "Writeup"
 tags: "CTF, Easy, Linux"
