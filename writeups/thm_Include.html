@@ -522,8 +522,18 @@ Sekarang saya mencoba mencari secret file di directory itu.</p>
 Flag kedua berhasil didapat.</p>
 <h2>Lessons Learned</h2>
 <ol>
-<li>Pelajaran 1</li>
-<li>Pelajaran 2</li>
+<li>
+<p><strong>Validasi Parameter di Sisi Server (Mass Assignment)</strong>: Jangan pernah mempercayai semua field yang dikirim klien secara langsung ke model/database. Parameter seperti <code>isAdmin</code> seharusnya tidak bisa dimodifikasi oleh pengguna biasa. Gunakan <em>allowlist</em> field yang boleh diubah (<em>permitted attributes</em>) dan selalu validasi otorisasi di sisi server, bukan hanya di UI.</p>
+</li>
+<li>
+<p><strong>Batasi Request SSRF dengan Allowlist URL</strong>: Form yang menerima URL sebagai input harus divalidasi ketat menggunakan <em>allowlist</em> domain/IP yang diizinkan. Tanpa pembatasan ini, penyerang bisa memanfaatkannya untuk menjangkau layanan internal (seperti API <code>127.0.0.1</code>) yang seharusnya tidak bisa diakses dari luar, termasuk mengekstrak kredensial tersembunyi.</p>
+</li>
+<li>
+<p><strong>Hindari Penggunaan Input Pengguna Langsung di <code>include()</code> / Parameter File</strong>: Kerentanan LFI terjadi karena parameter <code>img</code> di URL digunakan langsung untuk membaca file dari sistem. Selalu gunakan <em>whitelist</em> nama file yang diizinkan, atau mapping ID ke path yang sudah ditentukan, sehingga penyerang tidak bisa menggunakan path traversal (<code>....//....//</code>) untuk keluar dari direktori yang seharusnya.</p>
+</li>
+<li>
+<p><strong>Log Sanitization untuk Mencegah Log Poisoning → RCE</strong>: File log (seperti <code>/var/log/mail.log</code>) menampung data mentah dari koneksi eksternal tanpa sanitasi. Ketika dikombinasikan dengan LFI, log yang berisi payload PHP bisa dieksekusi oleh server. Pastikan log di-<em>escape</em> dengan benar, dan akses file log tidak pernah bisa dicapai melalui parameter yang dapat dikontrol pengguna.</p>
+</li>
 </ol>
             </div>
 

@@ -353,5 +353,10 @@ Flag kedua berhasil didapat.
 
 ## Lessons Learned
 
-1.  Pelajaran 1
-2.  Pelajaran 2
+1. **Validasi Parameter di Sisi Server (Mass Assignment)**: Jangan pernah mempercayai semua field yang dikirim klien secara langsung ke model/database. Parameter seperti `isAdmin` seharusnya tidak bisa dimodifikasi oleh pengguna biasa. Gunakan *allowlist* field yang boleh diubah (_permitted attributes_) dan selalu validasi otorisasi di sisi server, bukan hanya di UI.
+
+2. **Batasi Request SSRF dengan Allowlist URL**: Form yang menerima URL sebagai input harus divalidasi ketat menggunakan *allowlist* domain/IP yang diizinkan. Tanpa pembatasan ini, penyerang bisa memanfaatkannya untuk menjangkau layanan internal (seperti API `127.0.0.1`) yang seharusnya tidak bisa diakses dari luar, termasuk mengekstrak kredensial tersembunyi.
+
+3. **Hindari Penggunaan Input Pengguna Langsung di `include()` / Parameter File**: Kerentanan LFI terjadi karena parameter `img` di URL digunakan langsung untuk membaca file dari sistem. Selalu gunakan *whitelist* nama file yang diizinkan, atau mapping ID ke path yang sudah ditentukan, sehingga penyerang tidak bisa menggunakan path traversal (`....//....//`) untuk keluar dari direktori yang seharusnya.
+
+4. **Log Sanitization untuk Mencegah Log Poisoning → RCE**: File log (seperti `/var/log/mail.log`) menampung data mentah dari koneksi eksternal tanpa sanitasi. Ketika dikombinasikan dengan LFI, log yang berisi payload PHP bisa dieksekusi oleh server. Pastikan log di-*escape* dengan benar, dan akses file log tidak pernah bisa dicapai melalui parameter yang dapat dikontrol pengguna.
